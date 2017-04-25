@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import todoFactory from '../../lib/todoFactory';
+
 import Todo from '../todo/Todo';
 
 class TodoList extends Component {
@@ -23,6 +25,7 @@ class TodoList extends Component {
     // if this is not done then the meaning of 'this' will be lost when they are executed
     this.addTodo = this.addTodo.bind(this);
     this.handleNextItemChange = this.handleNextItemChange.bind(this);
+    this.removeTodo = this.removeTodo.bind(this);
   }
 
   // add the next item to our todo list when the form is submitted
@@ -33,13 +36,22 @@ class TodoList extends Component {
     // update the list only if the next item isn't empty space
     let nextItem = this.state.nextItem.trim();
     if(nextItem) {
-      let nextItems = this.state.items.concat([nextItem]);
+      let nextItems = this.state.items.concat([todoFactory(nextItem)]);
 
       this.setState({
         items: nextItems,
         nextItem: ''
       });
     }
+  }
+
+  // remove the todo with the given id
+  removeTodo(id) {
+    let nextItems = this.state.items.filter( item => item.id !== id );
+
+    this.setState({
+      items: nextItems
+    });
   }
 
   // update the state whenever something is typed into the text field
@@ -53,9 +65,9 @@ class TodoList extends Component {
     // generate a list of li elements of the todo items
     // we use the index of each item as the key
     // this is a naive approach but works fine for this demo
-    let todos = this.state.items.map((item, index) => 
-      <li key={index}>
-        <Todo item={item} />
+    let todos = this.state.items.map((item) => 
+      <li key={item.id}>
+        <Todo item={item} onRemoveTodo={this.removeTodo} />
       </li>
     );
 
