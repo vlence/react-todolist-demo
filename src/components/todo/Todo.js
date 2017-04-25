@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-// We made Todo a separate component even though it isn't doing much
-// Like this if we need to add additional features it will be easy
-function Todo(props) {
-  return (
-    <span>{props.item}</span>
-  );
+class Todo extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (<span>{this.props.item}</span>);
+  }
 }
 
 export default Todo;
